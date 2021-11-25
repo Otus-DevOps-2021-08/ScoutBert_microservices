@@ -1,5 +1,4 @@
 FROM python:3.6.0-alpine
-
 WORKDIR /app
 ADD . /app
 RUN pip install --upgrade pip
