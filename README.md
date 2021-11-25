@@ -14,7 +14,7 @@ yc compute instance create \
 
 docker-machine create \
 --driver generic \
---generic-ip-address=51.250.14.51 \
+--generic-ip-address=51.250.11.187 \
 --generic-ssh-user yc-user \
 --generic-ssh-key ~/.ssh/yc-user \
 docker-host
@@ -33,3 +33,23 @@ docker push scoutberty/otus-reddit:1.0
 
 запустить
 docker run --name reddit -d -p 9292:9292 scoutberty/otus-reddit:1.0
+
+
+Docker3
+
+Скачать образ MongoDB
+docker pull mongo:latest
+
+Собрать образы
+docker build -t scoutberty/post:1.0 ./post-py
+docker build -t scoutberty/comment:1.0 ./comment
+docker build -t scoutberty/ui:1.0 ./ui
+
+Создать спец сеть
+docker network create reddit
+
+запустить контейнеры
+docker run -d --network=reddit --network-alias=post_db --network-alias=comment_db mongo:latest
+docker run -d --network=reddit --network-alias=post scoutberty/post:1.0
+docker run -d --network=reddit --network-alias=comment scoutberty/comment:1.0
+docker run -d --network=reddit -p 9292:9292 scoutberty/ui:1.0
