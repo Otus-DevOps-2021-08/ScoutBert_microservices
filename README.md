@@ -53,3 +53,15 @@ docker run -d --network=reddit --network-alias=post_db --network-alias=comment_d
 docker run -d --network=reddit --network-alias=post scoutberty/post:1.0
 docker run -d --network=reddit --network-alias=comment scoutberty/comment:1.0
 docker run -d --network=reddit -p 9292:9292 scoutberty/ui:1.0
+
+Создадm Docker volume:
+docker volume create reddit_db
+
+Удалить старые копии контейнеров
+docker kill $(docker ps -q)
+
+Запустить контейнеры с volume
+docker run -d --network=reddit --network-alias=post_db --network-alias=comment_db -v reddit_db:/data/db mongo:latest
+docker run -d --network=reddit --network-alias=post scoutberty/post:1.0
+docker run -d --network=reddit --network-alias=comment scoutberty/comment:1.0
+docker run -d --network=reddit -p 9292:9292 scoutberty/ui:2.0
