@@ -65,3 +65,36 @@ docker run -d --network=reddit --network-alias=post_db --network-alias=comment_d
 docker run -d --network=reddit --network-alias=post scoutberty/post:1.0
 docker run -d --network=reddit --network-alias=comment scoutberty/comment:1.0
 docker run -d --network=reddit -p 9292:9292 scoutberty/ui:2.0
+
+Docker4
+
+Запустить контейнер с использованием none-драйвера
+docker run -ti --rm --network none joffotron/docker-net-tools -c ifconfig
+
+Запустить контейнер в сетевом пространстве docker-хоста
+docker run -ti --rm --network host joffotron/docker-net-tools -c ifconfig
+
+Создадь bridge-сеть в docker
+docker network create reddit --driver bridge
+
+Запустить наш проект reddit с использованием bridge-сети
+docker run -d --network=reddit --network-alias=post_db --network-alias=comment_db mongo:latest
+docker run -d --network=reddit --network-alias=post scoutberty/post:1.0
+docker run -d --network=reddit --network-alias=comment  scoutberty/comment:1.0
+docker run -d --network=reddit -p 9292:9292 scoutberty/ui:1.0
+
+Запустить  проект в 2-х bridge сетях.
+Создать docker-сети
+docker network create back_net --subnet=10.0.2.0/24
+docker network create front_net --subnet=10.0.1.0/24
+
+Запустить контейнеры
+docker run -d --network=front_net -p 9292:9292 --name ui  scoutberty/ui:1.0
+docker run -d --network=back_net --name comment  scoutberty/comment:1.0
+docker run -d --network=back_net --name post  scoutberty/post:1.0
+docker run -d --network=back_net --name mongo_db --network-alias=post_db --network-alias=comment_db mongo:latest
+
+Docker при инициализации контейнера может подключить к нему только 1 сеть
+По этому необходимо подключить контейнеры ко второй сети
+docker network connect front_net post
+docker network connect front_net comment
