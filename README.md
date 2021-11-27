@@ -98,3 +98,10 @@ Docker при инициализации контейнера может под�
 По этому необходимо подключить контейнеры ко второй сети
 docker network connect front_net post
 docker network connect front_net comment
+
+docker-compose
+
+Выполнить:
+export USERNAME=scoutberty
+docker-compose up -d
+docker-compose ps
