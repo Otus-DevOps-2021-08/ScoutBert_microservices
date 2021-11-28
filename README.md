@@ -105,3 +105,16 @@ docker-compose
 export USERNAME=scoutberty
 docker-compose up -d
 docker-compose ps
+
+CI-CD
+
+docker exec -it gitlab-runner gitlab-runner register \
+--url http://51.250.4.177// \
+--non-interactive \
+--locked=false \
+--name DockerRunner \
+--executor docker \
+--docker-image alpine:latest \
+--registration-token r4cGznxa45P5wx_B9CHo \
+--tag-list "linux,xenial,ubuntu,docker" \
+--run-untagged
