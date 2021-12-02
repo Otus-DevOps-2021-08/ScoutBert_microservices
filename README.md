@@ -132,3 +132,45 @@ git clone https://github.com/express42/reddit.git && rm -rf ./reddit/.git
 git add reddit/
 git commit -m "Add reddit app"
 git push gitlab gitlab-ci-1
+
+monitoring-1
+
+Создадим Docker хост в Yandex Cloud
+
+yc compute instance create \
+  --name docker-host \
+  --zone ru-central1-a \
+  --network-interface subnet-name=default-ru-central1-a,nat-ip-version=ipv4 \
+  --create-boot-disk image-folder-id=standard-images,image-family=ubuntu-1604-lts,size=15 \
+  --ssh-key ~/.ssh/yc-user.pub
+
+docker-machine create \
+  --driver generic \
+  --generic-ip-address=51.250.9.91 \
+  --generic-ssh-user yc-user \
+  --generic-ssh-key ~/.ssh/yc-user \
+  docker-host
+
+eval $(docker-machine env docker-host)
+
+Запуск Prometheus
+docker run --rm -p 9090:9090 -d --name prometheus prom/prometheus
+
+собираем Docker образ prometheus
+
+export USER_NAME=username
+docker build -t scoutberty/prometheus .
+
+Запушить образы
+docker push scoutberty/ui
+docker push scoutberty/comment
+docker push scoutberty/post
+docker push scoutberty/prometheus
+
+https://hub.docker.com/layers/scoutberty/comment/latest/images/sha256:082dfdbe719d232cd26b2d3c53b7f48a5f12fe0979a23c34690263ed2bddf301
+
+https://hub.docker.com/layers/scoutberty/prometheus/latest/images/sha256:9506f46e09b01cac95cafeb16e0869529557007eaf3346a36b336a1e150ae456
+
+https://hub.docker.com/layers/scoutberty/ui/latest/images/sha256:f226cc5613d2c2e3e992b6ca2f1f920d663633eea739db20ec8af28d74c3aa67
+
+https://hub.docker.com/layers/scoutberty/post/latest/images/sha256:c636d0605418864908cb010615bc04f431f24aa39f5b6b17f187c9bec916a9f8
