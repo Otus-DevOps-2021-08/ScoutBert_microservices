@@ -174,3 +174,6 @@ https://hub.docker.com/layers/scoutberty/prometheus/latest/images/sha256:9506f46
 https://hub.docker.com/layers/scoutberty/ui/latest/images/sha256:f226cc5613d2c2e3e992b6ca2f1f920d663633eea739db20ec8af28d74c3aa67
 
 https://hub.docker.com/layers/scoutberty/post/latest/images/sha256:c636d0605418864908cb010615bc04f431f24aa39f5b6b17f187c9bec916a9f8
+
+
+logging-1
